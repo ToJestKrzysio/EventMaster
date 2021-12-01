@@ -1,0 +1,13 @@
+{% load socialaccount %}
+
+{% get_providers as socialaccount_providers %}
+<ul class="list-group list-group-flush">
+  {% for provider in socialaccount_providers %}
+    <li class="list-group-item">
+      <a title="{{ provider.name }}" class="btn btn-primary" style="width: 10"
+         href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        Sign in with {{ provider.name }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
