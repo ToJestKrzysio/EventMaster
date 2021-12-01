@@ -23,6 +23,15 @@
         <div class="navbar-nav">
           <a class="nav-link" href="#">Home</a>
         </div>
+        {% if user is not None %}
+          <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+          </div>
+        {% else %}
+          <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+          </div>
+        {% endif %}
       </div>
     </div>
   </nav>
