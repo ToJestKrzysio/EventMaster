@@ -16,7 +16,6 @@
             <a class="btn btn-success" style="max-height: 2.6rem">Join Event</a>
           </div>
         </div>
-
       </div>
       <div class="card-body">
         <div class="row" style="max-width: 20rem">
@@ -24,22 +23,18 @@
           <div class="col">{{ event.start_time|date:"d-m-Y H:m" }}</div>
         </div>
         <div class="row" style="max-width: 20rem">
-          <div class="col"><h5>Duration:</h5></div>
-          <div class="col">{{ event.formatted_duration }}</div>
+          <div class="col"><h5>End time:</h5></div>
+          <div class="col">{{ event.end_time|date:"d-m-Y H:m" }}</div>
         </div>
         <div class="row" style="max-width: 20rem">
-          <div class="col"><h5>Location:</h5></div>
-          <div class="col">{{ event.location }}</div>
-        </div>
-        <div class="row" style="max-width: 20rem">
-          <div class="col"><h5>Seats Left:</h5></div>
-          <div class="col">{{ event.seats_left }}</div>
+          <div class="col"><h5>Seats Taken:</h5></div>
+          <div class="col">{{ event.seats_taken }}/{{ event.max_occupancy }}</div>
         </div>
         <hr>
         <p>{{ event.description }}</p>
       </div>
     </div>
   {% empty %}
-
+    <h1>No Upcoming Events</h1>
   {% endfor %}
 {% endblock content %}

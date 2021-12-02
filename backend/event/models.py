@@ -19,6 +19,9 @@ class Event(models.Model):
                                 editable=False)
     creation_date = models.DateTimeField(auto_now=True, editable=False)
 
+    def __str__(self):
+        return f"{self.title}"
+
 
 def user_event_deadline():
     return timezone.now() + timedelta(weeks=1)
@@ -30,6 +33,7 @@ class Registration(models.Model):
     payment_completed = models.BooleanField(default=False)
     payment_date = models.DateTimeField(blank=True, null=True)
     payment_deadline = models.DateTimeField(default=user_event_deadline)
+    created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.event} - {self.user}"
+        return f"{self.event.title} - {self.user}"
