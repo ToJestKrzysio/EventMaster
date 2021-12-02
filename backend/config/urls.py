@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+admin.site.site_title = "EventMaster Admin"
+admin.site.site_header = "EventMaster Admin"
+admin.site.index_title = "EventMaster"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
