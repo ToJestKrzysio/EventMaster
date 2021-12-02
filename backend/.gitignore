@@ -20,3 +20,7 @@ celerybeat-schedule
 celerybeat.pid
 
 .idea
+
+envs/*
+!envs/*-default
+
