@@ -20,9 +20,5 @@ class TestEventListView:
         assert "event/event_list.html" in templates
 
     def test_response_context(self, event_list_view_response):
-        print(event_list_view_response.context["events"])
-        assert False
-        # event_list =
-        #
-        # for event in event_list:
-        #     assert event.seats_taken == 1
+        for event in event_list_view_response.context["events"]:
+            assert event.seats_taken == 1
