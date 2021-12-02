@@ -6,13 +6,13 @@ from django.utils import timezone
 
 
 class Event(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=200)
     description = models.TextField(max_length=5000)
     start_time = models.DateTimeField()
-    duration = models.DurationField(default="00:05:00")
+    end_time = models.DateTimeField()
+    registration_deadline = models.DateTimeField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
     max_occupancy = models.IntegerField()
-    current_occupancy = models.IntegerField(default=0)
     location = models.CharField(max_length=50)
 
     creator = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING,
