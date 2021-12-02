@@ -15,7 +15,7 @@ class EventListView(generic.ListView):
             seats_taken=Count(
                 "registration__event_id",
                 filter=(Q(registration__payment_completed=True) |
-                        Q(registration__payment_deadline__lt=Now()))
+                        Q(registration__payment_deadline__gt=Now()))
             )
         )
         return queryset
