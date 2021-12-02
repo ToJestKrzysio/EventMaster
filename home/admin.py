@@ -8,7 +8,7 @@ class AnnouncementModelAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         obj.author = request.user
-        obj.save()
+        super().save_model(request, obj, form, change)
 
 
 admin.site.register(Announcement, AnnouncementModelAdmin)

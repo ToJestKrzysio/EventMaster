@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 
     #local
     'home.apps.HomeConfig',
+    'event.apps.EventConfig',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +161,5 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 SITE_ID = 2
+
+LOGIN_REDIRECT_URL = "home:home"

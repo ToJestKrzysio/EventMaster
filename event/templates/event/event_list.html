@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Event List
+{% endblock title %}
+
+{% block content %}
+  {% for event in events %}
+    <div class="card my-4">
+      <div class="card-header p-4">
+        <div class="row">
+          <div class="col-10 me-auto">
+            <h3>{{ event.title }}</h3>
+          </div>
+          <div class="col-2 d-flex justify-content-end">
+            <a class="btn btn-success" style="max-height: 2.6rem">Join Event</a>
+          </div>
+        </div>
+
+      </div>
+      <div class="card-body">
+        <div class="row" style="max-width: 20rem">
+          <div class="col"><h5>Start time</h5></div>
+          <div class="col">{{ event.start_time|date:"d-m-Y H:m" }}</div>
+        </div>
+        <div class="row" style="max-width: 20rem">
+          <div class="col"><h5>Duration:</h5></div>
+          <div class="col">{{ event.duration }}</div>
+        </div>
+        <div class="row" style="max-width: 20rem">
+          <div class="col"><h5>Location:</h5></div>
+          <div class="col">{{ event.location }}</div>
+        </div>
+        <div class="row" style="max-width: 20rem">
+          <div class="col"><h5>Seats Left:</h5></div>
+          <div class="col">{{ event.seats_left }}</div>
+        </div>
+        <hr>
+        <p>{{ event.description }}</p>
+      </div>
+    </div>
+  {% empty %}
+
+  {% endfor %}
+{% endblock content %}
