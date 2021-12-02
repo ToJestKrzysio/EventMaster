@@ -1,26 +1,19 @@
 from django.contrib import admin
 
 from event import models
+from event.forms import EventForm
 
 
 class EventAdmin(admin.ModelAdmin):
     list_display = (
         "title", "location", "start_time", "end_time", "max_occupancy",
     )
-    fields = [
-        "title", "description", "start_time", "end_time", "price",
-        "max_occupancy", "location"
-    ]
+    form = EventForm
 
     def save_model(self, request, obj, form, change):
         obj.creator = request.user
         super().save_model(request, obj, form, change)
 
 
-class RegistrationAdmin(admin.ModelAdmin):
-    fields = ["Event", "User", "payment_completed", "payment_date",
-              "payment_deadline"]
-
-
 admin.site.register(models.Event, EventAdmin)
-admin.site.register(models.Registration, RegistrationAdmin)
+admin.site.register(models.Registration)

@@ -103,6 +103,7 @@ DATABASES = {
         "PASSWORD": env("POSTGRES_DB_PASSWORD"),
         "HOST": env("POSTGRES_DB_HOST"),
         "PORT": env("POSTGRES_DB_PORT"),
+        # 'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 }
 
@@ -130,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'CET'
 
 USE_I18N = True
 
