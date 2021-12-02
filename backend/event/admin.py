@@ -5,11 +5,10 @@ from event import models
 
 class EventAdmin(admin.ModelAdmin):
     list_display = (
-        "title", "location", "start_time", "duration", "max_occupancy",
-        "current_occupancy"
+        "title", "location", "start_time", "end_time", "max_occupancy",
     )
     fields = [
-        "title", "description", "start_time", "duration", "price",
+        "title", "description", "start_time", "end_time", "price",
         "max_occupancy", "location"
     ]
 
