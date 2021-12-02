@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Announcement List
+{% endblock title %}
+
+{% block content %}
+  {% for announcement in announcements %}
+    <div class="card my-2">
+      <div class="card-header">
+        <h2>{{ announcement.title }}</h2>
+      </div>
+      <div class="card-body">
+        <p>{{ announcement.content }}</p>
+      </div>
+    </div>
+  {% empty %}
+    <h2>No Recent Posts</h2>
+  {% endfor %}
+{% endblock content %}

@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     #local
-
+    'home.apps.HomeConfig',
 ]
 
 MIDDLEWARE = [
