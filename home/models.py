@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import CheckConstraint, Q, F
 from django.utils import timezone
 
 
