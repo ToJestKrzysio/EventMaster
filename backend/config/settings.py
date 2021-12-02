@@ -103,7 +103,6 @@ DATABASES = {
         "PASSWORD": env("POSTGRES_DB_PASSWORD"),
         "HOST": env("POSTGRES_DB_HOST"),
         "PORT": env("POSTGRES_DB_PORT"),
-        # 'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 }
 
