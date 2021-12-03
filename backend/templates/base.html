@@ -27,6 +27,9 @@
       <div class="navbar-nav">
         <a class="nav-link" href="{% url 'home:home' %}">Home</a>
       </div>
+      <div class="navbar-nav">
+        <a class="nav-link" href="{% url 'event:event_list' %}">Events</a>
+      </div>
       <div class="navbar-nav ms-auto">
         {% if user.is_superuser %}
           <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>

@@ -19,3 +19,19 @@ class EventListView(generic.ListView):
             )
         )
         return queryset
+
+
+class EventDetailView(generic.DetailView):
+    model = Event
+    context_object_name = "event"
+
+    def get_queryset(self, *args, **kwargs):
+        pk = self.kwargs["pk"]
+        queryset = Event.objects.filter(pk=pk).annotate(
+            seats_taken=Count(
+                "registration__event_id",
+                filter=(Q(registration__payment_completed=True) |
+                        Q(registration__payment_deadline__gt=Now()))
+            )
+        )
+        return queryset
