@@ -11,7 +11,7 @@
         <div class="row">
           <div class="col-10 me-auto">
             <h3>
-              <a href="{% url 'event:event_details' event.pk %}"
+              <a href="{% url 'event:event_detail' event.pk %}"
                  class="link-dark">{{ event.title }}</a>
             </h3>
           </div>
@@ -26,20 +26,8 @@
           <div class="col">{{ event.start_time|date:"d-m-Y H:m" }}</div>
         </div>
         <div class="row" style="max-width: 20rem">
-          <div class="col"><h5>End time:</h5></div>
-          <div class="col">{{ event.end_time|date:"d-m-Y H:m" }}</div>
-        </div>
-        <div class="row" style="max-width: 20rem">
           <div class="col"><h5>Seats Taken:</h5></div>
           <div class="col">{{ event.seats_taken }}/{{ event.max_occupancy }}</div>
-        </div>
-        <div class="row" style="max-width: 20rem">
-          <div class="col"><h5>Entrance Fee:</h5></div>
-          <div class="col">{{ event.price }}</div>
-        </div>
-        <div class="row" style="max-width: 20rem">
-          <div class="col"><h5>Location:</h5></div>
-          <div class="col">{{ event.location }}</div>
         </div>
         <hr>
         <p>{{ event.description }}</p>

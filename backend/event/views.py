@@ -25,9 +25,9 @@ class EventDetailView(generic.DetailView):
     model = Event
     context_object_name = "event"
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset.annotate(
+    def get_queryset(self, *args, **kwargs):
+        pk = self.kwargs["pk"]
+        queryset = Event.objects.filter(pk=pk).annotate(
             seats_taken=Count(
                 "registration__event_id",
                 filter=(Q(registration__payment_completed=True) |

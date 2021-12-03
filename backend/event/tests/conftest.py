@@ -32,6 +32,7 @@ def event_db(db):
         max_occupancy=13,
         location="D2 404",
         creator=admin,
+        pk=1,
     )
     Registration.objects.create(
         event=event, user=user,
@@ -43,3 +44,8 @@ def event_db(db):
 @pytest.fixture
 def event_list_view_response(client, event_db):
     return client.get(reverse("event:event_list"))
+
+
+@pytest.fixture
+def event_detail_view_response(client, event_db):
+    return client.get(reverse("event:event_detail", kwargs={"pk": 1}))
