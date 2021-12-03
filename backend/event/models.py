@@ -27,8 +27,6 @@ def user_event_deadline():
 class Registration(models.Model):
     event = models.ForeignKey("Event", on_delete=models.DO_NOTHING)
     user = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING)
-    payment_completed = models.BooleanField(default=False)
-    payment_date = models.DateTimeField(blank=True, null=True)
     payment_deadline = models.DateTimeField(default=user_event_deadline)
 
     def __str__(self):

@@ -11,6 +11,8 @@ django-crispy-forms = "==1.13.0"
 django-allauth = "==0.46.0"
 pytest-django = "*"
 pytest-cov = "*"
+django-payments = "*"
+django-payments-payu = "*"
 
 [dev-packages]
 

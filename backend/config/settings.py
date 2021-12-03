@@ -14,10 +14,8 @@ from pathlib import Path
 
 from environs import Env
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -37,7 +35,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -55,10 +52,12 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'payments',
 
-    #local
+    # local
     'home.apps.HomeConfig',
     'event.apps.EventConfig',
+    'payment.apps.PaymentConfig'
 ]
 
 MIDDLEWARE = [
@@ -90,7 +89,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -124,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -137,7 +134,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -163,3 +159,17 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 2
 
 LOGIN_REDIRECT_URL = "home:home"
+
+PAYMENT_HOST = '127.0.0.1:8000'
+PAYMENT_USES_SSL = False
+PAYMENT_MODEL = 'payment.Payment'
+PAYMENT_VARIANTS = {
+    'payu': ('payments_payu.provider.PayuProvider', {
+        'pos_id': env('PAYU_POS_ID'),
+        'second_key': env('PAYU_SECOND_KEY'),
+        'client_secret': env('PAYU_CLIENT_SECRET'),
+        'sandbox': True,
+        'capture': False,
+    }),
+}
+TICKET_TAX_RATE = 0.23
