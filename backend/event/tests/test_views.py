@@ -54,7 +54,6 @@ class TestEventDetailView:
         assert event.seats_taken == 1
 
 
-
 class TestEventConfirmationView:
 
     @pytest.mark.parametrize("url", [
