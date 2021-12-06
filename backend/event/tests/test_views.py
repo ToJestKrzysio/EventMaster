@@ -1,6 +1,17 @@
 import pytest
 from django.urls import reverse
 
+from event.views import add_registration_counts_to_event
+
+
+def test_add_registration_counts_to_event(event_db):
+    result = add_registration_counts_to_event(pk=1)
+
+    event = result.first()
+    assert event.title == "Test Event"
+    assert event.price == 666
+    assert event.seats_taken == 1
+
 
 class TestEventListView:
 
@@ -90,3 +101,25 @@ class TestEventConfirmationView:
         assert event.price == 666
         assert event.max_occupancy == 13
         assert event.location == "D2 404"
+
+
+class RegistrationCreateView:
+
+    @pytest.mark.parametrize("url", [
+        "event/register/1",
+        reverse("event:register", kwargs={"pk": 1}),
+    ])
+    def test_response_code_unauthorized(self, client, event_db, url):
+        response = client.get(url)
+
+        assert response.status_code == 302
+
+    @pytest.mark.parametrize("url", [
+        "event/register/1",
+        reverse("event:register", kwargs={"pk": 1}),
+    ])
+    def test_response_code_authorized(self, client, event_db, db_user, url):
+        client.force_login(db_user)
+        response = client.get(url)
+
+        assert response.status_code == 200
