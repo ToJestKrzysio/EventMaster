@@ -90,3 +90,30 @@ class TestEventConfirmationView:
         assert event.price == 666
         assert event.max_occupancy == 13
         assert event.location == "D2 404"
+
+
+class RegistrationCreateView:
+
+    @pytest.mark.parametrize("url", [
+        "event/register/1",
+        reverse("event:register", kwargs={"pk": 1}),
+    ])
+    def test_response_code_unauthorized(self, client, event_db, url):
+        response = client.get(url)
+
+        assert response.status_code == 302
+
+    @pytest.mark.parametrize("url", [
+        "event/register/1",
+        reverse("event:register", kwargs={"pk": 1}),
+    ])
+    def test_response_code_authorized(self, client, event_db, db_user, url):
+        client.force_login(db_user)
+        response = client.get(url)
+
+        assert response.status_code == 200
+
+    # def test_response_paid_event(self, client, db_free_event):
+
+
+    # def test_response_free_event(

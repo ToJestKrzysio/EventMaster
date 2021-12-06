@@ -46,6 +46,22 @@ def db_event(db_admin):
 
 
 @pytest.fixture
+def db_free_event(db_admin):
+    return Event.objects.create(
+        title="Test Free Event",
+        description="This is test Event",
+        start_time=timezone.now(),
+        end_time=timezone.now(),
+        registration_deadline=timezone.now(),
+        price=0,
+        max_occupancy=13,
+        location="D2 404",
+        creator=db_admin,
+        pk=2,
+    )
+
+
+@pytest.fixture
 def db_registration(db_user, db_event):
     return Registration.objects.create(
         event=db_event, user=db_user,
