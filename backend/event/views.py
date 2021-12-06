@@ -3,7 +3,7 @@ from django.db.models import Count, Q
 from django.db.models.functions import Now
 from django.views import generic
 
-from event.models import Event, Registration
+from event.models import Event
 
 
 class EventListView(generic.ListView):
