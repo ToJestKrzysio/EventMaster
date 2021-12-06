@@ -60,7 +60,17 @@ class TestEventConfirmationView:
         "/event/sign_up/1",
         reverse("event:event_sign_up", kwargs={"pk": 1})
     ])
-    def test_response_code(self, client, event_db, url):
+    def test_response_code_unauthenticated(self, client, event_db, url):
+        response = client.get(url)
+
+        assert response.status_code == 302
+
+    @pytest.mark.parametrize("url", [
+        "/event/sign_up/1",
+        reverse("event:event_sign_up", kwargs={"pk": 1})
+    ])
+    def test_response_code_authenticated(self, client, event_db, db_user, url):
+        client.force_login(db_user)
         response = client.get(url)
 
         assert response.status_code == 200

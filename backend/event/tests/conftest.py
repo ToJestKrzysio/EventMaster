@@ -70,5 +70,6 @@ def event_detail_view_response(client, event_db):
 
 
 @pytest.fixture
-def event_confirmation_view_response(client, event_db):
+def event_confirmation_view_response(client, event_db, db_user):
+    client.force_login(db_user)
     return client.get(reverse("event:event_sign_up", kwargs={"pk": 1}))
