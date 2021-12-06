@@ -1,9 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Case, When, Q, F, Value
+from django.db.models import Count, Q
 from django.db.models.functions import Now
 from django.views import generic
 
-from event.models import Event, Registration
+from event.models import Event
 
 
 class EventListView(generic.ListView):
@@ -38,7 +38,7 @@ class EventDetailView(generic.DetailView):
         return queryset
 
 
-class EventSignUpConfirmationView(generic.DetailView):
+class EventSignUpConfirmationView(LoginRequiredMixin, generic.DetailView):
     model = Event
     context_object_name = "event"
     template_name = "event/event_confirmation.html"
