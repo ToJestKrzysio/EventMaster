@@ -103,23 +103,53 @@ class TestEventConfirmationView:
         assert event.location == "D2 404"
 
 
-class RegistrationCreateView:
+class TestRegistrationCreateView:
 
     @pytest.mark.parametrize("url", [
-        "event/register/1",
+        "/event/register/1",
         reverse("event:register", kwargs={"pk": 1}),
     ])
     def test_response_code_unauthorized(self, client, event_db, url):
+        response = client.post(url)
+
+        assert response.status_code == 302
+        assert reverse("account_login") in response.url
+
+    @pytest.mark.parametrize("url", [
+        "/event/register/1",
+        reverse("event:register", kwargs={"pk": 1}),
+    ])
+    def test_response_code_authorized(self, client, event_db, db_user, url):
+        client.force_login(db_user)
+        response = client.post(url)
+
+        assert response.status_code == 302
+        assert reverse("account_login") not in response.url
+
+class TestRegistrationSuccessfulView:
+
+    @pytest.mark.parametrize("url", [
+        "/register_success/1",
+        reverse("event:register_success", kwargs={"pk": 1}),
+    ])
+    def test_response_code_unauthenticated(self, client, event_db, url):
         response = client.get(url)
 
         assert response.status_code == 302
 
     @pytest.mark.parametrize("url", [
-        "event/register/1",
-        reverse("event:register", kwargs={"pk": 1}),
+        "/register_success/1",
+        reverse("event:register_success", kwargs={"pk": 1})
     ])
-    def test_response_code_authorized(self, client, event_db, db_user, url):
+    def test_response_code_authenticated(self, client, event_db, db_user, url):
         client.force_login(db_user)
         response = client.get(url)
 
         assert response.status_code == 200
+
+    def test_response_template(self, event_registration_successful_response):
+        templates = {temp.name for temp in
+                     event_registration_successful_response.templates}
+
+        assert "base.html" in templates
+        assert "event/registration_successful.html" in templates

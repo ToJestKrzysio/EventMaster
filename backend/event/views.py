@@ -12,12 +12,12 @@ from event.models import Event, Registration
 def add_registration_counts_to_event(pk: int):
     """ Get selected event with number of users enrolled for it. """
     return Event.objects.filter(pk=pk).annotate(
-            seats_taken=Count(
-                "registration__event_id",
-                filter=(Q(registration__payment_completed=True) |
-                        Q(registration__payment_deadline__gt=Now()))
-            )
+        seats_taken=Count(
+            "registration__event_id",
+            filter=(Q(registration__payment_completed=True) |
+                    Q(registration__payment_deadline__gt=Now()))
         )
+    )
 
 
 class EventListView(generic.ListView):
@@ -76,3 +76,19 @@ class RegistrationCreateView(LoginRequiredMixin, generic.CreateView):
         if self.free_event:
             return reverse("home:home")  # TODO redirect to completed
         return reverse("event:event_list")  # TODO redirect to payment page
+
+
+class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
+    model = Event
+    template_name = "event/registration_successful.html"
+
+    def get_queryset(self):
+        event_pk = self.kwargs["pk"]
+        user = self.request.user
+        registrations = Registration.objects.filter(
+            user_id=user.id, event_id=event_pk, payment_completed=True)
+        # if not registrations:
+        #     return redirect("home:home")  # TODO failed reservation redirect
+        if len(registrations) > 1:
+            return registrations.first()
+        return registrations
