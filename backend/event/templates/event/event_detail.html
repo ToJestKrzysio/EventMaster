@@ -5,20 +5,23 @@
 {% endblock title %}
 
 {% block content %}
-  <div class="card my-4">
-    <div class="card-header p-4">
+  <div class="container" style="max-width: 55rem">
+    <div class="card">
+      <div class="card-header p-4">
         <div class="row">
-          <div class="col-10 me-auto">
+          <div class="col-sm-12 col-md-9 col-lg-10 me-auto">
             <h3>{{ event.title }}</h3>
           </div>
-          <div class="col-2 d-flex justify-content-end">
-            <a class="btn btn-success" style="max-height: 2.6rem">Join Event</a>
+          <div
+              class="d-block col-sm-6 col-md-3 col-lg-2 d-md-flex justify-content-end">
+            <a class="btn btn-success mt-2 mt-md-0" style="max-height: 2.6rem"
+               href="{% url 'event:event_sign_up' event.pk %}">Join Event</a>
           </div>
         </div>
       </div>
-    {% with "30rem" as max_width %}
-      <div class="card-body">
-        <div class="row" style="max-width: {{ max_width }}">
+      {% with "30rem" as max_width %}
+        <div class="card-body">
+          <div class="row" style="max-width: {{ max_width }}">
             <div class="col"><h5>Start time</h5></div>
             <div class="col">{{ event.start_time|date:"d-m-Y H:m" }}</div>
           </div>
@@ -29,7 +32,7 @@
           <div class="row" style="max-width: {{ max_width }}">
             <div class="col"><h5>Seats taken:</h5></div>
             <div class="col">
-                {{ event.seats_taken }}/{{ event.max_occupancy }}
+              {{ event.seats_taken }}/{{ event.max_occupancy }}
             </div>
           </div>
           <div class="row" style="max-width: {{ max_width }}">
@@ -38,7 +41,8 @@
           </div>
           <div class="row" style="max-width: {{ max_width }}">
             <div class="col"><h5>Registration deadline:</h5></div>
-            <div class="col">{{ event.registration_deadline|date:"d-m-Y H:m" }}</div>
+            <div class="col">
+              {{ event.registration_deadline|date:"d-m-Y H:m" }}</div>
           </div>
           <div class="row" style="max-width: {{ max_width }}">
             <div class="col"><h5>Location:</h5></div>
@@ -46,7 +50,8 @@
           </div>
           <hr>
           <p>{{ event.description }}</p>
-      </div>
-    {% endwith %}
+        </div>
+      {% endwith %}
+    </div>
   </div>
 {% endblock content %}
