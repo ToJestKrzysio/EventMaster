@@ -1,6 +1,17 @@
 import pytest
 from django.urls import reverse
 
+from event.views import add_registration_counts_to_event
+
+
+def test_add_registration_counts_to_event(event_db):
+    result = add_registration_counts_to_event(pk=1)
+
+    event = result.first()
+    assert event.title == "Test Event"
+    assert event.price == 666
+    assert event.seats_taken == 1
+
 
 class TestEventListView:
 
@@ -112,8 +123,3 @@ class RegistrationCreateView:
         response = client.get(url)
 
         assert response.status_code == 200
-
-    # def test_response_paid_event(self, client, db_free_event):
-
-
-    # def test_response_free_event(

@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
 from django.db.models import Count, Q
 from django.db.models.functions import Now
 from django.shortcuts import redirect
@@ -8,6 +7,17 @@ from django.utils import timezone
 from django.views import generic
 
 from event.models import Event, Registration
+
+
+def add_registration_counts_to_event(pk: int):
+    """ Get selected event with number of users enrolled for it. """
+    return Event.objects.filter(pk=pk).annotate(
+            seats_taken=Count(
+                "registration__event_id",
+                filter=(Q(registration__payment_completed=True) |
+                        Q(registration__payment_deadline__gt=Now()))
+            )
+        )
 
 
 class EventListView(generic.ListView):
@@ -32,14 +42,7 @@ class EventDetailView(generic.DetailView):
 
     def get_queryset(self, *args, **kwargs):
         pk = self.kwargs["pk"]
-        queryset = Event.objects.filter(pk=pk).annotate(
-            seats_taken=Count(
-                "registration__event_id",
-                filter=(Q(registration__payment_completed=True) |
-                        Q(registration__payment_deadline__gt=Now()))
-            )
-        )
-        return queryset
+        return add_registration_counts_to_event(pk)
 
 
 class EventSignUpConfirmationView(LoginRequiredMixin, generic.DetailView):
@@ -52,20 +55,19 @@ class RegistrationCreateView(LoginRequiredMixin, generic.CreateView):
     model = Registration
     fields = []
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.free_event = False
+
     def form_valid(self, form):
-        event = Event.objects.filter(pk=self.kwargs["pk"]).annotate(
-            seats_taken=Count(
-                "registration__event_id",
-                filter=(Q(registration__payment_completed=True) |
-                        Q(registration__payment_deadline__gt=Now()))
-            )
-        ).first()
+        pk = self.kwargs["pk"]
+        event = add_registration_counts_to_event(pk).first()
+        self.free_event = not bool(event.price)
         if event.seats_taken >= event.max_occupancy:
             return redirect(reverse("admin:index"))  # TODO redirect to fail
-        self.free_event = not bool(event.price)
         form.instance.event = event
         form.instance.user = self.request.user
-        if not self.free_event:
+        if self.free_event:
             form.payment_completed = True
             form.payment_date = timezone.now()
         return super().form_valid(form)
