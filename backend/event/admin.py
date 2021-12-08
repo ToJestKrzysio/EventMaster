@@ -6,7 +6,7 @@ from event.forms import EventForm
 
 class EventAdmin(admin.ModelAdmin):
     list_display = (
-        "title", "location", "start_time", "end_time", "max_occupancy",
+        "title", "location", "start_time", "end_time", "max_occupancy", "price",
     )
     form = EventForm
 

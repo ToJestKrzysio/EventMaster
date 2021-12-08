@@ -45,13 +45,14 @@ class RegistrationCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.event = event
         form.instance.user = self.request.user
         if self.free_event:
-            form.payment_completed = True
-            form.payment_date = timezone.now()
+            form.instance.payment_completed = True
+            form.instance.payment_date = timezone.now()
         return super().form_valid(form)
 
     def get_success_url(self):
         if self.free_event:
-            return reverse("home:home")  # TODO redirect to completed
+            return reverse("event:register_success",
+                           kwargs={"pk": self.kwargs["pk"]})
         return reverse("event:event_list")  # TODO redirect to payment page
 
 
@@ -63,7 +64,7 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
         try:
             self.object = self.get_object()
         except Http404:
-            return redirect(reverse("home:home"))
+            return redirect(reverse("home:home"))  # TODO Registration fail redirect
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
@@ -71,7 +72,7 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
         event_pk = self.kwargs["pk"]
         user = self.request.user
         try:
-            registration = Registration.objects.get(
+            registration = Registration.objects.select_related("event").get(
                 user_id=user.id, event_id=event_pk, payment_completed=True)
         except Registration.DoesNotExist:
             raise Http404("No registration found!")

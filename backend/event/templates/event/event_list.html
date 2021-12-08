@@ -5,41 +5,39 @@
 {% endblock title %}
 
 {% block content %}
-  <div class="container" style="max-width: 55rem">
-    {% for event in events %}
-      <div class="card mb-4">
-        <div class="card-header p-4">
-          <div class="row">
-            <div class="col-sm-12 col-md-9 col-lg-10 me-auto">
-              <h3>
-                <a href="{% url 'event:event_detail' event.pk %}"
-                   class="link-dark">{{ event.title }}</a>
-              </h3>
-            </div>
-            <div
-                class="d-block col-sm-6 col-md-3 col-lg-2 d-md-flex justify-content-end">
-              <a class="btn btn-success mt-2 mt-md-0"
-                 style="max-height: 2.6rem"
-                 href="{% url 'event:event_sign_up' event.pk %}">Join Event</a>
-            </div>
+  {% for event in events %}
+    <div class="card mb-4">
+      <div class="card-header p-4">
+        <div class="row">
+          <div class="col-sm-12 col-md-9 col-lg-10 me-auto">
+            <h3>
+              <a href="{% url 'event:event_detail' event.pk %}"
+                 class="link-dark">{{ event.title }}</a>
+            </h3>
           </div>
-        </div>
-        <div class="card-body">
-          <div class="row" style="max-width: 20rem">
-            <div class="col"><h5>Start time</h5></div>
-            <div class="col">{{ event.start_time|date:"d-m-Y H:m" }}</div>
+          <div
+              class="d-block col-sm-6 col-md-3 col-lg-2 d-md-flex justify-content-end">
+            <a class="btn btn-success mt-2 mt-md-0"
+               style="max-height: 2.6rem"
+               href="{% url 'event:event_sign_up' event.pk %}">Join Event</a>
           </div>
-          <div class="row" style="max-width: 20rem">
-            <div class="col"><h5>Seats Taken:</h5></div>
-            <div
-                class="col">{{ event.seats_taken }}/{{ event.max_occupancy }}</div>
-          </div>
-          <hr>
-          <p>{{ event.description }}</p>
         </div>
       </div>
-      {% empty %}
-      <h1>No Upcoming Events</h1>
-    {% endfor %}
-  </div>
+      <div class="card-body">
+        <div class="row" style="max-width: 20rem">
+          <div class="col"><h5>Start time</h5></div>
+          <div class="col">{{ event.start_time|date:"d-m-Y H:m" }}</div>
+        </div>
+        <div class="row" style="max-width: 20rem">
+          <div class="col"><h5>Seats Taken:</h5></div>
+          <div
+              class="col">{{ event.seats_taken }}/{{ event.max_occupancy }}</div>
+        </div>
+        <hr>
+        <p>{{ event.description }}</p>
+      </div>
+    </div>
+    {% empty %}
+    <h1>No Upcoming Events</h1>
+  {% endfor %}
 {% endblock content %}
