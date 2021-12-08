@@ -67,7 +67,7 @@ def db_registration(db_user, db_event):
         event=db_event, user=db_user,
         payment_completed=True,
         payment_deadline=timezone.now() + timedelta(days=2),
-    )
+       )
 
 
 @pytest.fixture

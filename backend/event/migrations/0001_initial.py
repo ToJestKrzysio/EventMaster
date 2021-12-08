@@ -3,6 +3,8 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
+
+import event.helpers
 import event.models
 
 
@@ -37,7 +39,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('payment_completed', models.BooleanField(default=False)),
                 ('payment_date', models.DateTimeField(blank=True, null=True)),
-                ('payment_deadline', models.DateTimeField(default=event.models.user_event_deadline)),
+                ('payment_deadline', models.DateTimeField(default=event.helpers.user_event_deadline)),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='event.event')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to=settings.AUTH_USER_MODEL)),
             ],

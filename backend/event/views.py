@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -55,16 +56,23 @@ class RegistrationCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
-    model = Event
+    context_object_name = "registration"
     template_name = "event/registration_successful.html"
 
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = self.get_object()
+        except Http404:
+            return redirect(reverse("home:home"))
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def get_object(self, queryset=None):
         event_pk = self.kwargs["pk"]
         user = self.request.user
-        registrations = Registration.objects.filter(
-            user_id=user.id, event_id=event_pk, payment_completed=True)
-        # if not registrations:
-        #     return redirect("home:home")  # TODO failed reservation redirect
-        if len(registrations) > 1:
-            return registrations.first()
-        return registrations
+        try:
+            registration = Registration.objects.get(
+                user_id=user.id, event_id=event_pk, payment_completed=True)
+        except Registration.DoesNotExist:
+            raise Http404("No registration found!")
+        return registration
