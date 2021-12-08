@@ -9,5 +9,7 @@ urlpatterns = [
     path("sign_up/<int:pk>", views.EventSignUpConfirmationView.as_view(),
          name="event_sign_up"),
     path("register/<int:pk>", views.RegistrationCreateView.as_view(),
-         name="register")
+         name="register"),
+    path("register_success/<int:pk>",
+         views.RegistrationSuccessfulView.as_view(), name="register_success"),
 ]

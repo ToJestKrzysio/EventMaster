@@ -1,8 +1,8 @@
-from datetime import timedelta
-
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils import timezone
+
+from event.helpers import user_event_deadline
+from event.managers import EventRegistrationCountManager
 
 
 class Event(models.Model):
@@ -19,12 +19,12 @@ class Event(models.Model):
                                 editable=False)
     creation_date = models.DateTimeField(auto_now=True, editable=False)
 
+    # Custom managers
+    objects = models.Manager()
+    objects_with_registrations = EventRegistrationCountManager()
+
     def __str__(self):
         return f"{self.title}"
-
-
-def user_event_deadline():
-    return timezone.now() + timedelta(weeks=1)
 
 
 class Registration(models.Model):
