@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  User Events List
+{% endblock title %}
+
+{% block content %}
+  {% for registration in registrations %}
+    <div class="card mb-4">
+      <div class="card-header p-4">
+        <h3>
+          <a rel="stylesheet" class="link-dark "
+             href="{% url 'event:event_detail' registration.event.pk %}">
+            {{ registration.event.title }}
+          </a>
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="row" style="max-width: {{ max_width }}">
+          <div class="col"><h5>Start time</h5></div>
+          <div class="col">
+            {{ registration.event.start_time|date:"d-m-Y H:m" }}
+          </div>
+        </div>
+        <div class="row" style="max-width: {{ max_width }}">
+          <div class="col"><h5>End time:</h5></div>
+          <div class="col">
+            {{ registration.event.end_time|date:"d-m-Y H:m" }}</div>
+        </div>
+        <div class="row" style="max-width: {{ max_width }}">
+          <div class="col"><h5>Location:</h5></div>
+          <div class="col">{{ registration.event.location }}</div>
+        </div>
+        <hr>
+        <p>{{ registration.event.description }}</p>
+      </div>
+    </div>
+    {% empty %}
+    <h1>You have not signed up for any event.</h1>
+  {% endfor %}
+{% endblock content %}

@@ -122,3 +122,9 @@ def event_registration_payment_incomplete_response(client, event_db, db_user):
 def event_registration_max_occupancy_response(client, event_db, db_user):
     client.force_login(db_user)
     return client.get(reverse("event:register_max_occupancy"))
+
+
+@pytest.fixture
+def user_events_list_response(client, event_db, db_user):
+    client.force_login(db_user)
+    return client.get(reverse("event:user_events_list"))

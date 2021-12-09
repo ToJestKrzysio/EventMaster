@@ -110,3 +110,13 @@ class RegistrationMaxOccupancyView(LoginRequiredMixin, generic.TemplateView):
     template_name = "event/registration_incomplete.html"
     extra_context = {"message": "This event has already maximum occupancy.",
                      "title": "Registration Failed"}
+
+
+class UserEventsListView(LoginRequiredMixin, generic.ListView):
+    context_object_name = "registrations"
+    template_name = "event/user_event_list.html"
+
+    def get_queryset(self):
+        return Registration.objects.select_related("event").filter(
+            user_id=self.request.user.id, payment_completed=True).order_by(
+            '-event__start_time')

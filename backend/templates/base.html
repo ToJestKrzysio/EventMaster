@@ -30,6 +30,13 @@
       <div class="navbar-nav">
         <a class="nav-link" href="{% url 'event:event_list' %}">Events</a>
       </div>
+      {% if user.is_authenticated %}
+        <div class="navbar-nav">
+          <a class="nav-link" href="{% url 'event:user_events_list' %}">
+            My Events
+          </a>
+        </div>
+      {% endif %}
       <div class="navbar-nav ms-auto">
         {% if user.is_superuser %}
           <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
