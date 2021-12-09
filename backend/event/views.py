@@ -86,7 +86,7 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
         try:
             registration = registrations.get(payment_completed=True)
         except Registration.DoesNotExist:
-            raise PaymentIncompleteException("No completed payments")
+            raise PaymentIncompleteException("payment incomplete.")
         return registration
 
 
