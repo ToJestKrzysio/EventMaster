@@ -140,8 +140,8 @@ class TestRegistrationCreateView:
         response = client.post(url)
 
         assert response.status_code == 302
-        assert response.url == reverse(
-            "event:register_failed")  # TODO already registered view
+        assert response.url == reverse("event:register_success",
+                                       kwargs={"pk": 1})
 
     @pytest.mark.parametrize("url", [
         "/event/register/1",
