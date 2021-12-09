@@ -200,7 +200,7 @@ class TestRegistrationPaymentIncompleteView:
 
     @pytest.mark.parametrize("url", [
         "/event/register_payment_incomplete",
-        reverse("event:register_failed"),
+        reverse("event:register_payment_incomplete"),
     ])
     def test_response_code_unauthorized(self, client, event_db, url):
         response = client.get(url)
@@ -210,7 +210,7 @@ class TestRegistrationPaymentIncompleteView:
 
     @pytest.mark.parametrize("url", [
         "/event/register_payment_incomplete",
-        reverse("event:register_failed"),
+        reverse("event:register_payment_incomplete"),
     ])
     def test_response_code_authenticated(self, client, event_db, db_user, url):
         client.force_login(db_user)
@@ -232,3 +232,40 @@ class TestRegistrationPaymentIncompleteView:
             decode("UTF-8")
         assert "The payment have not been completed" in content
         assert "Payment Incomplete" in content
+
+
+class TestRegistrationMaxOccupancyView:
+
+    @pytest.mark.parametrize("url", [
+        "/event/register_max_occupancy",
+        reverse("event:register_max_occupancy"),
+    ])
+    def test_response_code_unauthorized(self, client, event_db, url):
+        response = client.get(url)
+
+        assert response.status_code == 302
+        assert reverse("account_login") in response.url
+
+    @pytest.mark.parametrize("url", [
+        "/event/register_max_occupancy",
+        reverse("event:register_max_occupancy"),
+    ])
+    def test_response_code_authenticated(self, client, event_db, db_user, url):
+        client.force_login(db_user)
+        response = client.get(url)
+
+        assert response.status_code == 200
+
+    def test_response_template(self,
+                               event_registration_max_occupancy_response):
+        templates = {temp.name for temp in
+                     event_registration_max_occupancy_response.templates}
+
+        assert "base.html" in templates
+        assert "event/registration_incomplete.html" in templates
+
+    def test_html_content(self, event_registration_max_occupancy_response):
+        content = event_registration_max_occupancy_response.content.decode(
+            "UTF-8")
+        assert "This event has already maximum occupancy." in content
+        assert "Registration Failed" in content
