@@ -142,7 +142,6 @@ class TestRegistrationSuccessfulView:
         reverse("event:register_success", kwargs={"pk": 1}),
     ])
     def test_response_payment_incomplete(self, client, event_db, url):
-
         user, _, _, registration = event_db
         registration.payment_completed = False
         registration.save()
@@ -150,7 +149,8 @@ class TestRegistrationSuccessfulView:
         response = client.get(url)
 
         assert response.status_code == 302
-        assert response.url == reverse("home:home")  # TODO failed reservation redirect
+        assert response.url == reverse(
+            "home:home")  # TODO failed reservation redirect
 
     def test_response_template(self, event_registration_successful_response):
         templates = {temp.name for temp in
@@ -158,3 +158,33 @@ class TestRegistrationSuccessfulView:
 
         assert "base.html" in templates
         assert "event/registration_successful.html" in templates
+
+
+class TestRegistrationIncompleteView:
+
+    @pytest.mark.parametrize("url", [
+        "/event/register_failed",
+        reverse("event:register_failed"),
+    ])
+    def test_response_code_unauthorized(self, client, event_db, url):
+        response = client.get(url)
+
+        assert response.status_code == 302
+        assert reverse("account_login") in response.url
+
+    @pytest.mark.parametrize("url", [
+        "/event/register_failed",
+        reverse("event:register_failed"),
+    ])
+    def test_response_code_authenticated(self, client, event_db, db_user, url):
+        client.force_login(db_user)
+        response = client.get(url)
+
+        assert response.status_code == 200
+
+    def test_response_template(self, event_registration_failed_response):
+        templates = {temp.name for temp in
+                     event_registration_failed_response.templates}
+
+        assert "base.html" in templates
+        assert "event/registration_failed.html" in templates

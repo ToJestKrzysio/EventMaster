@@ -77,3 +77,7 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
         except Registration.DoesNotExist:
             raise Http404("No registration found!")
         return registration
+
+
+class RegistrationFailedView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "event/registration_failed.html"
