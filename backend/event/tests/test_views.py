@@ -140,7 +140,34 @@ class TestRegistrationCreateView:
         response = client.post(url)
 
         assert response.status_code == 302
-        assert response.url == reverse("event:register_failed")  # TODO already registered view
+        assert response.url == reverse(
+            "event:register_failed")  # TODO already registered view
+
+    @pytest.mark.parametrize("url", [
+        "/event/register/1",
+        reverse("event:register", kwargs={"pk": 1}),
+    ])
+    def test_successful_registration_payment(self, client, event_db, db_event,
+                                             db_user_2, url):
+        client.force_login(db_user_2)
+        response = client.post(url)
+
+        assert response.status_code == 302
+        assert response.url == reverse(
+            "event:register_failed")  # TODO redirect to payment page
+
+    @pytest.mark.parametrize("url", [
+        "/event/register/2",
+        reverse("event:register", kwargs={"pk": 2}),
+    ])
+    def test_successful_registration_free(self, client, event_db,
+                                          db_free_event, db_user_2, url):
+        client.force_login(db_user_2)
+        response = client.post(url)
+
+        assert response.status_code == 302
+        assert response.url == reverse("event:register_success",
+                                       kwargs={"pk": 2})
 
 
 class TestRegistrationSuccessfulView:
