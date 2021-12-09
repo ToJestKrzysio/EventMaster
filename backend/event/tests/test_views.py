@@ -336,3 +336,33 @@ class TestRegistrationMaxOccupancyView:
             "UTF-8")
         assert "This event has already maximum occupancy." in content
         assert "Registration Failed" in content
+
+
+class TestUserEventsListView:
+
+    @pytest.mark.parametrize("url", [
+        "/event/user_events",
+        reverse("event:user_events_list"),
+    ])
+    def test_response_code_unauthorized(self, client, event_db, url):
+        response = client.get(url)
+
+        assert response.status_code == 302
+        assert reverse("account_login") in response.url
+
+    @pytest.mark.parametrize("url", [
+        "/event/user_events",
+        reverse("event:user_events_list"),
+    ])
+    def test_response_code_authenticated(self, client, event_db, db_user, url):
+        client.force_login(db_user)
+        response = client.get(url)
+
+        assert response.status_code == 200
+
+    def test_response_template(self, user_events_list_response):
+        templates = {temp.name for temp in
+                     user_events_list_response.templates}
+
+        assert "base.html" in templates
+        assert "event/user_event_list.html" in templates
