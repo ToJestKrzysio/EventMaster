@@ -44,7 +44,8 @@ class RegistrationCreateView(LoginRequiredMixin, generic.CreateView):
         already_registered = Registration.objects.filter(
             event_id=self.kwargs["pk"], user_id=self.request.user.id)
         if already_registered:
-            return redirect(reverse("event:register_failed"))  # TODO already registered view
+            return redirect(reverse(
+                "event:register_success", kwargs={"pk": self.kwargs["pk"]}))
         if event.seats_taken >= event.max_occupancy:
             return redirect(reverse("event:register_max_occupancy"))
         form.instance.event = event
@@ -105,8 +106,7 @@ class RegistrationPaymentIncompleteView(LoginRequiredMixin,
                      "title": "Payment Incomplete"}
 
 
-class RegistrationMaxOccupancyView(LoginRequiredMixin,
-                                   generic.TemplateView):
+class RegistrationMaxOccupancyView(LoginRequiredMixin, generic.TemplateView):
     template_name = "event/registration_incomplete.html"
     extra_context = {"message": "This event has already maximum occupancy.",
                      "title": "Registration Failed"}
