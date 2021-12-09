@@ -200,7 +200,7 @@ class TestRegistrationPaymentIncompleteView:
 
     @pytest.mark.parametrize("url", [
         "/event/register_payment_incomplete",
-        reverse("event:register_failed"),
+        reverse("event:register_payment_incomplete"),
     ])
     def test_response_code_unauthorized(self, client, event_db, url):
         response = client.get(url)
@@ -210,7 +210,7 @@ class TestRegistrationPaymentIncompleteView:
 
     @pytest.mark.parametrize("url", [
         "/event/register_payment_incomplete",
-        reverse("event:register_failed"),
+        reverse("event:register_payment_incomplete"),
     ])
     def test_response_code_authenticated(self, client, event_db, db_user, url):
         client.force_login(db_user)
@@ -238,7 +238,7 @@ class TestRegistrationMaxOccupancyView:
 
     @pytest.mark.parametrize("url", [
         "/event/register_max_occupancy",
-        reverse("event:register_failed"),
+        reverse("event:register_max_occupancy"),
     ])
     def test_response_code_unauthorized(self, client, event_db, url):
         response = client.get(url)
@@ -248,7 +248,7 @@ class TestRegistrationMaxOccupancyView:
 
     @pytest.mark.parametrize("url", [
         "/event/register_max_occupancy",
-        reverse("event:register_failed"),
+        reverse("event:register_max_occupancy"),
     ])
     def test_response_code_authenticated(self, client, event_db, db_user, url):
         client.force_login(db_user)
