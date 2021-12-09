@@ -20,4 +20,6 @@ urlpatterns = [
     path("register_max_occupancy",
          views.RegistrationMaxOccupancyView.as_view(),
          name="register_max_occupancy"),
+    path("user_events", views.UserEventsListView.as_view(),
+         name="user_events_list")
 ]
