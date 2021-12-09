@@ -17,4 +17,7 @@ urlpatterns = [
     path("register_payment_incomplete",
          views.RegistrationPaymentIncompleteView.as_view(),
          name="register_payment_incomplete"),
+    path("register_max_occupancy",
+         views.RegistrationMaxOccupancyView.as_view(),
+         name="register_max_occupancy"),
 ]

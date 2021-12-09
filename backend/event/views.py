@@ -93,3 +93,10 @@ class RegistrationPaymentIncompleteView(LoginRequiredMixin,
     extra_context = {"message": "The payment have not been completed or is "
                                 "still being processed.",
                      "title": "Payment Incomplete"}
+
+
+class RegistrationMaxOccupancyView(LoginRequiredMixin,
+                                   generic.TemplateView):
+    template_name = "event/registration_incomplete.html"
+    extra_context = {"message": "This event has already maximum occupancy.",
+                     "title": "Registration Failed"}
