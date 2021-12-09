@@ -115,6 +115,33 @@ class TestRegistrationCreateView:
         assert response.status_code == 302
         assert reverse("account_login") not in response.url
 
+    @pytest.mark.parametrize("url", [
+        "/event/register/1",
+        reverse("event:register", kwargs={"pk": 1}),
+    ])
+    def test_max_occupancy(self, client, event_db, db_event, db_user_2, url):
+        event = db_event
+        event.max_occupancy = 1
+        event.save()
+
+        client.force_login(db_user_2)
+        response = client.post(url)
+
+        assert response.status_code == 302
+        assert response.url == reverse("event:register_max_occupancy")
+
+    @pytest.mark.parametrize("url", [
+        "/event/register/1",
+        reverse("event:register", kwargs={"pk": 1}),
+    ])
+    def test_already_registered(self, client, event_db, db_event, db_user,
+                                url):
+        client.force_login(db_user)
+        response = client.post(url)
+
+        assert response.status_code == 302
+        assert response.url == reverse("event:register_failed")  # TODO already registered view
+
 
 class TestRegistrationSuccessfulView:
 
@@ -149,8 +176,21 @@ class TestRegistrationSuccessfulView:
         response = client.get(url)
 
         assert response.status_code == 302
-        assert response.url == reverse(
-            "home:home")  # TODO failed reservation redirect
+        assert response.url == reverse("event:register_payment_incomplete")
+
+    @pytest.mark.parametrize("url", [
+        "/event/register_success/42",
+        reverse("event:register_success", kwargs={"pk": 42}),
+    ])
+    def test_response_event_missing(self, client, event_db, url):
+        user, _, _, registration = event_db
+        registration.payment_completed = False
+        registration.save()
+        client.force_login(user)
+        response = client.get(url)
+
+        assert response.status_code == 302
+        assert response.url == reverse("event:register_failed")
 
     def test_response_template(self, event_registration_successful_response):
         templates = {temp.name for temp in

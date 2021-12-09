@@ -1,0 +1,2 @@
+class PaymentIncompleteException(Exception):
+    pass
