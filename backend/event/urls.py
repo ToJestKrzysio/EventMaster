@@ -12,4 +12,6 @@ urlpatterns = [
          name="register"),
     path("register_success/<int:pk>",
          views.RegistrationSuccessfulView.as_view(), name="register_success"),
+    path("register_failed", views.RegistrationFailedView.as_view(),
+         name="register_failed")
 ]
