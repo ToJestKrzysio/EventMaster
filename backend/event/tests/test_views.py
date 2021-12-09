@@ -187,4 +187,48 @@ class TestRegistrationIncompleteView:
                      event_registration_failed_response.templates}
 
         assert "base.html" in templates
-        assert "event/registration_failed.html" in templates
+        assert "event/registration_incomplete.html" in templates
+
+    def test_html_content(self, event_registration_failed_response):
+        content = event_registration_failed_response.content. \
+            decode("UTF-8")
+        assert "Looks like something went wrong" in content
+        assert "Registration Failed" in content
+
+
+class TestRegistrationPaymentIncompleteView:
+
+    @pytest.mark.parametrize("url", [
+        "/event/register_payment_incomplete",
+        reverse("event:register_failed"),
+    ])
+    def test_response_code_unauthorized(self, client, event_db, url):
+        response = client.get(url)
+
+        assert response.status_code == 302
+        assert reverse("account_login") in response.url
+
+    @pytest.mark.parametrize("url", [
+        "/event/register_payment_incomplete",
+        reverse("event:register_failed"),
+    ])
+    def test_response_code_authenticated(self, client, event_db, db_user, url):
+        client.force_login(db_user)
+        response = client.get(url)
+
+        assert response.status_code == 200
+
+    def test_response_template(self,
+                               event_registration_payment_incomplete_response):
+        templates = {temp.name for temp in
+                     event_registration_payment_incomplete_response.templates}
+
+        assert "base.html" in templates
+        assert "event/registration_incomplete.html" in templates
+
+    def test_html_content(self,
+                          event_registration_payment_incomplete_response):
+        content = event_registration_payment_incomplete_response.content. \
+            decode("UTF-8")
+        assert "The payment have not been completed" in content
+        assert "Payment Incomplete" in content

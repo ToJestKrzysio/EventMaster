@@ -101,3 +101,9 @@ def event_registration_successful_response(client, event_db, db_user):
 def event_registration_failed_response(client, event_db, db_user):
     client.force_login(db_user)
     return client.get(reverse("event:register_failed"))
+
+
+@pytest.fixture
+def event_registration_payment_incomplete_response(client, event_db, db_user):
+    client.force_login(db_user)
+    return client.get(reverse("event:register_payment_incomplete"))
