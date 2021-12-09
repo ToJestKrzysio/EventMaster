@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  Registration attempt failed
+  {{ title }}
 {% endblock title %}
 
 {% block content %}
   <div class="card my-3 text-center">
     <div class="card-header">
-      <h3 class="text-danger">Registration Failed</h3>
+      <h3 class="text-danger">{{ title }}</h3>
     </div>
     <div class="card-body">
-      <p>Looks like something went wrong during your registration attempt.</p>
+      <p>{{ message }}</p>
       <p>Please try again or get in touch with site administration.</p>
       <a type="submit" class="btn btn-success px-3"
          href="{% url 'home:home' %}">Home Page</a>

@@ -64,7 +64,8 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
         try:
             self.object = self.get_object()
         except Http404:
-            return redirect(reverse("home:home"))  # TODO Registration fail redirect
+            return redirect(
+                reverse("home:home"))  # TODO Registration fail redirect
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
@@ -80,4 +81,15 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
 
 
 class RegistrationFailedView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "event/registration_failed.html"
+    template_name = "event/registration_incomplete.html"
+    extra_context = {"message": "Looks like something went wrong during "
+                                "your registration attempt.",
+                     "title": "Registration Failed"}
+
+
+class RegistrationPaymentIncompleteView(LoginRequiredMixin,
+                                        generic.TemplateView):
+    template_name = "event/registration_incomplete.html"
+    extra_context = {"message": "The payment have not been completed or is "
+                                "still being processed.",
+                     "title": "Payment Incomplete"}

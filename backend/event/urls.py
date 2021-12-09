@@ -13,5 +13,8 @@ urlpatterns = [
     path("register_success/<int:pk>",
          views.RegistrationSuccessfulView.as_view(), name="register_success"),
     path("register_failed", views.RegistrationFailedView.as_view(),
-         name="register_failed")
+         name="register_failed"),
+    path("register_payment_incomplete",
+         views.RegistrationPaymentIncompleteView.as_view(),
+         name="register_payment_incomplete"),
 ]
