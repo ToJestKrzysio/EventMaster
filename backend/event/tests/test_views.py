@@ -160,7 +160,7 @@ class TestRegistrationSuccessfulView:
         assert "event/registration_successful.html" in templates
 
 
-class TestRegistrationFailedView:
+class TestRegistrationIncompleteView:
 
     @pytest.mark.parametrize("url", [
         "/event/register_failed",
