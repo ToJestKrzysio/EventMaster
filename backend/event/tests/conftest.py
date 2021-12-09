@@ -18,6 +18,15 @@ def db_user(db):
 
 
 @pytest.fixture
+def db_user_2(db):
+    return get_user_model().objects.create(
+        username="testuser2",
+        password="NotVeryStrongPassword",
+        email="testmail@testmail2.com"
+    )
+
+
+@pytest.fixture
 def db_admin(db):
     admin = get_user_model().objects.create(
         username="superuser",

@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 
+from event.exceptions import PaymentIncompleteException
 from event.models import Event, Registration
 
 
@@ -40,8 +41,12 @@ class RegistrationCreateView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         event = Event.objects_with_registrations.get(pk=self.kwargs["pk"])
         self.free_event = not bool(event.price)
+        already_registered = Registration.objects.filter(
+            event_id=self.kwargs["pk"], user_id=self.request.user.id)
+        if already_registered:
+            return redirect(reverse("event:register_failed"))  # TODO already registered view
         if event.seats_taken >= event.max_occupancy:
-            return redirect(reverse("admin:index"))  # TODO redirect to fail
+            return redirect(reverse("event:register_max_occupancy"))
         form.instance.event = event
         form.instance.user = self.request.user
         if self.free_event:
@@ -53,7 +58,8 @@ class RegistrationCreateView(LoginRequiredMixin, generic.CreateView):
         if self.free_event:
             return reverse("event:register_success",
                            kwargs={"pk": self.kwargs["pk"]})
-        return reverse("event:event_list")  # TODO redirect to payment page
+        return reverse(
+            "event:register_failed")  # TODO redirect to payment page
 
 
 class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
@@ -63,20 +69,24 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
     def get(self, request, *args, **kwargs):
         try:
             self.object = self.get_object()
+        except PaymentIncompleteException:
+            return redirect(reverse("event:register_payment_incomplete"))
         except Http404:
-            return redirect(
-                reverse("home:home"))  # TODO Registration fail redirect
+            return redirect(reverse("event:register_failed"))
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
     def get_object(self, queryset=None):
         event_pk = self.kwargs["pk"]
         user = self.request.user
-        try:
-            registration = Registration.objects.select_related("event").get(
-                user_id=user.id, event_id=event_pk, payment_completed=True)
-        except Registration.DoesNotExist:
+        registrations = Registration.objects.select_related("event").filter(
+            user_id=user.id, event_id=event_pk)
+        if not registrations:
             raise Http404("No registration found!")
+        try:
+            registration = registrations.get(payment_completed=True)
+        except Registration.DoesNotExist:
+            raise PaymentIncompleteException("payment incomplete.")
         return registration
 
 
