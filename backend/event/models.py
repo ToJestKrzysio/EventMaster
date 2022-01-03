@@ -34,6 +34,8 @@ class Registration(models.Model):
     payment_date = models.DateTimeField(blank=True, null=True)
     payment_deadline = models.DateTimeField(default=user_event_deadline)
     created = models.DateTimeField(auto_now=True)
+    modified_by = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING, null=True,
+                                    editable=False, related_name='modified_by')
 
     def __str__(self):
         return f"{self.event.title} - {self.user}"
