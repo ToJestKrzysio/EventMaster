@@ -30,7 +30,5 @@ class RegistrationAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-
-
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Registration, RegistrationAdmin)
