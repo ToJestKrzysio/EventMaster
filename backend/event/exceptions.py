@@ -1,2 +1,4 @@
 class PaymentIncompleteException(Exception):
-    pass
+    def __init__(self,  registration):
+        super().__init__("Payment incomplete.")
+        self.registration = registration

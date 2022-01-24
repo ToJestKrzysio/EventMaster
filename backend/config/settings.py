@@ -55,10 +55,12 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'payments',
 
     #local
     'home.apps.HomeConfig',
     'event.apps.EventConfig',
+    'payment.apps.PaymentConfig'
 ]
 
 MIDDLEWARE = [
@@ -164,3 +166,18 @@ SITE_ID = 2
 
 LOGIN_REDIRECT_URL = "home:home"
 LOGIN_URL = "account_login"
+
+PAYMENT_HOST = env("PAYMENT_HOST")
+PAYMENT_USES_SSL = False
+PAYMENT_MODEL = 'payment.Payment'
+PAYMENT_TICKET_TAX = 0.08
+
+PAYMENT_VARIANTS = {
+    'default': ('payments_payu.provider.PayuProvider', {
+        'pos_id': env("PAYMENT_POS_ID"),
+        'second_key': env("PAYMENT_SECOND_KEY"),
+        'client_secret': env("PAYMENT_CLIENT_SECRET"),
+        'sandbox': env("PAYMENT_IS_SANDBOX"),
+        'capture': False,
+    }),
+}

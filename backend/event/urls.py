@@ -14,7 +14,7 @@ urlpatterns = [
          views.RegistrationSuccessfulView.as_view(), name="register_success"),
     path("register_failed", views.RegistrationFailedView.as_view(),
          name="register_failed"),
-    path("register_payment_incomplete",
+    path("register_payment_incomplete/<int:pk>",
          views.RegistrationPaymentIncompleteView.as_view(),
          name="register_payment_incomplete"),
     path("register_max_occupancy",

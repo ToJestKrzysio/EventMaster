@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Payment Details
+{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            Payment for registration for event
+            <b>
+                <a class="text-decoration-none"
+                   href="{% url "event:event_detail" object.registration.event.id %}">
+                    {{ object.registration.event.title }}
+                </a>
+            </b>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-5 col-md-3">Status: </div>
+                <div class="col">{{ object.status }}</div>
+            </div>
+            <div class="row">
+                <div class="col-5 col-md-3">Price : </div>
+                <div class="col">{{ object.total }}{{ object.currency }}</div>
+            </div>
+            <div class="row">
+                <div class="col-5 col-md-3">Customer first name: </div>
+                <div class="col">{{ object.billing_first_name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-5 col-md-3">Customer second name: </div>
+                <div class="col">{{ object.billing_second_name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-5 col-md-3">Customer email: </div>
+                <div class="col">{{ object.billing_email }}</div>
+            </div>
+        </div>
+        {% if object.status == PaymentStatus.WAITING %}
+            <div class="card-footer">
+                    <a class="btn btn-success" href="{{ redirect_url }}">Pay</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

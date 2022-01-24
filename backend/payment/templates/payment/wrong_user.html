@@ -1,22 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  {{ title }}
+    Error - wrong user
 {% endblock title %}
 
 {% block content %}
-  <div class="card my-3 text-center">
-    <div class="card-header">
-      <h3 class="text-danger">{{ title }}</h3>
-    </div>
-    <div class="card-body">
+  <div class="container" style="max-width: 40rem">
+    <div class="card">
+      <div class="card-body">
       <p>{{ message }}</p>
       <p>Please try again or get in touch with site administration.</p>
       <a type="submit" class="btn btn-success px-3"
          href="{% url 'home:home' %}">Home Page</a>
-      {% if registration.event.price > 0 %}
-          <a class="btn btn-success px-3" href="{% url 'payment:create' registration.id%}">Pay</a>
-      {% endif %}
+      </div>
     </div>
   </div>
 {% endblock content %}
