@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.shortcuts import redirect
@@ -7,6 +9,10 @@ from django.views import generic
 
 from event.exceptions import PaymentIncompleteException
 from event.models import Event, Registration
+
+from payment.models import Payment
+
+from config import settings
 
 
 class EventListView(generic.ListView):
@@ -59,8 +65,7 @@ class RegistrationCreateView(LoginRequiredMixin, generic.CreateView):
         if self.free_event:
             return reverse("event:register_success",
                            kwargs={"pk": self.kwargs["pk"]})
-        return reverse(
-            "event:register_failed")  # TODO redirect to payment page
+        return reverse("payment:create", kwargs={"pk": self.object.id})
 
 
 class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
@@ -70,8 +75,8 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
     def get(self, request, *args, **kwargs):
         try:
             self.object = self.get_object()
-        except PaymentIncompleteException:
-            return redirect(reverse("event:register_payment_incomplete"))
+        except PaymentIncompleteException as e:
+            return redirect(reverse("event:register_payment_incomplete", kwargs={'pk': e.registration.id}))
         except Http404:
             return redirect(reverse("event:register_failed"))
         context = self.get_context_data(object=self.object)
@@ -87,7 +92,7 @@ class RegistrationSuccessfulView(LoginRequiredMixin, generic.DetailView):
         try:
             registration = registrations.get(payment_completed=True)
         except Registration.DoesNotExist:
-            raise PaymentIncompleteException("payment incomplete.")
+            raise PaymentIncompleteException(registration=registrations.get())
         return registration
 
 
@@ -99,7 +104,9 @@ class RegistrationFailedView(LoginRequiredMixin, generic.TemplateView):
 
 
 class RegistrationPaymentIncompleteView(LoginRequiredMixin,
-                                        generic.TemplateView):
+                                        generic.DetailView):
+    model = Registration
+    context_object_name = "registration"
     template_name = "event/registration_incomplete.html"
     extra_context = {"message": "The payment have not been completed or is "
                                 "still being processed.",

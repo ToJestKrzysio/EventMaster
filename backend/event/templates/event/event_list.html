@@ -30,9 +30,14 @@
         </div>
         <div class="row" style="max-width: 20rem">
           <div class="col"><h5>Seats Taken:</h5></div>
-          <div
-              class="col">{{ event.seats_taken }}/{{ event.max_occupancy }}</div>
+          <div class="col">{{ event.seats_taken }}/{{ event.max_occupancy }}</div>
         </div>
+        {% if event.price > 0 %}
+            <div class="row" style="max-width: 20rem">
+                  <div class="col"><h5>Price:</h5></div>
+                  <div class="col">{{ event.price }}PLN</div>
+            </div>
+        {% endif %}
         <hr>
         <p>{{ event.description }}</p>
       </div>
