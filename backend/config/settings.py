@@ -181,3 +181,4 @@ PAYMENT_VARIANTS = {
         'capture': False,
     }),
 }
+PAYU_CONTINUE_PATH = "home:home"
