@@ -22,11 +22,11 @@
       <div class="card-body">
         <div class="row" style="max-width: {{ max_width }}">
           <div class="col"><h5>Start time</h5></div>
-          <div class="col">{{ event.start_time|date:"d-m-Y H:m" }}</div>
+          <div class="col">{{ event.start_time|date:"h-m-Y H:i" }}</div>
         </div>
         <div class="row" style="max-width: {{ max_width }}">
           <div class="col"><h5>End time:</h5></div>
-          <div class="col">{{ event.end_time|date:"d-m-Y H:m" }}</div>
+          <div class="col">{{ event.end_time|date:"h-m-Y H:i" }}</div>
         </div>
         <div class="row" style="max-width: {{ max_width }}">
           <div class="col"><h5>Seats taken:</h5></div>
@@ -41,7 +41,7 @@
         <div class="row" style="max-width: {{ max_width }}">
           <div class="col"><h5>Registration deadline:</h5></div>
           <div class="col">
-            {{ event.registration_deadline|date:"d-m-Y H:m" }}</div>
+            {{ event.registration_deadline|date:"h-m-Y H:i" }}</div>
         </div>
         <div class="row" style="max-width: {{ max_width }}">
           <div class="col"><h5>Location:</h5></div>

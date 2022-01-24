@@ -18,7 +18,7 @@
       <p>This event is scheduled to be held in
         <strong>{{ registration.event.location }}</strong> on <strong>
           {{ registration.event.start_time|date:"d.m.Y" }}</strong> starting
-        from <strong>{{ registration.event.start_time|date:"H:m" }}</strong>.
+        from <strong>{{ registration.event.start_time|date:"H:i" }}</strong>.
       </p>
       <a type="submit" class="btn btn-success px-3"
          href="{% url 'home:home' %}">Home Page</a>

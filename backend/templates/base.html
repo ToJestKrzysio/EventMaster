@@ -54,6 +54,16 @@
 </nav>
 
 <div class="container">
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <div class="alert alert-dismissible fade show
+            alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <div class="row justify-content-center">
     <div class="col-12 col-lg-8">
       {% block content %}{% endblock content %}
